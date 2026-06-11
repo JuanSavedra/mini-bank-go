@@ -70,10 +70,30 @@ minibank/
 
 ## Como rodar (F0)
 
+### Ambiente local com Docker (um comando)
+
+Sobe a API Go + Postgres com reprodutibilidade:
+
+```bash
+docker compose up --build
+```
+
+A API responde em `http://localhost:8080/health`. O Postgres fica em `localhost:5432` e persiste os dados no volume `pgdata` entre restarts.
+
+Credenciais vêm de variáveis de ambiente, com defaults no `compose`. Para sobrescrever, copie o exemplo e edite:
+
+```bash
+cp .env.example .env
+```
+
+Derrubar (mantendo os dados): `docker compose down`. Apagar também o volume: `docker compose down -v`.
+
+### Rodar os apps direto (sem container)
+
 ```bash
 # Backend
 cd backend
-go run .
+go run ./cmd/api
 
 # Frontend
 cd frontend

@@ -1,0 +1,34 @@
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-minibank}:${POSTGRES_PASSWORD:-minibank}@db:5432/${POSTGRES_DB:-minibank}?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-minibank}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-minibank}
+      POSTGRES_DB: ${POSTGRES_DB:-minibank}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-minibank}"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:
