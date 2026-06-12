@@ -100,3 +100,25 @@ cd frontend
 npm install
 npm start
 ```
+
+### Qualidade de código (format e lint)
+
+Ferramentas necessárias (instalar uma vez):
+
+```bash
+go install golang.org/x/tools/cmd/goimports@latest
+go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+# angular-eslint já está no frontend (devDependencies)
+```
+
+Comandos via `Makefile` na raiz (rodam backend + frontend):
+
+| Comando | O que faz |
+|---------|-----------|
+| `make fmt` | Formata: `gofmt` + `goimports` (Go) e `prettier` (front) |
+| `make fmt-check` | Falha se houver arquivo Go fora do padrão |
+| `make vet` | `go vet ./...` no backend |
+| `make lint` | `golangci-lint run` (back) + `ng lint` (front) |
+| `make check` | Gate completo: `fmt-check` + `vet` + `lint` |
+
+O VS Code aplica **format-on-save** (config em `.vscode/settings.json`); extensões recomendadas em `.vscode/extensions.json`.
