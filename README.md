@@ -22,21 +22,30 @@ O projeto cobre desde cadastro do cliente até backoffice administrativo, com RB
 
 ```
 minibank/
-├── backend/          # Go — ponto de entrada do servidor
-│   ├── go.mod
-│   └── hello.go
-└── frontend/         # Angular 21 standalone
-    ├── angular.json
-    ├── package.json
-    └── tsconfig.json
+├── docker-compose.yml      # API Go + Postgres (ambiente local)
+├── Makefile                # atalhos de format/lint (back + front)
+├── .env.example            # variáveis de ambiente do Postgres
+├── .vscode/                # format-on-save e extensões recomendadas
+├── backend/                # módulo Go (module backend)
+│   ├── cmd/api/            # entrada da API (net/http): / e /health
+│   ├── internal/           # domínios: account, auth, transaction
+│   ├── Dockerfile          # build multi-stage (imagem final enxuta)
+│   ├── .golangci.yml       # config do golangci-lint
+│   └── go.mod
+└── frontend/               # Angular 21 standalone + SSR
+    ├── src/app/core/       # models e services transversais (ApiService)
+    ├── src/app/shared/     # models de domínio (Account, Transaction)
+    ├── src/app/features/   # telas por feature (a partir da F3)
+    ├── src/environments/   # config dev/prod (baseUrl da API)
+    └── eslint.config.js
 ```
 
 ## Roadmap (F0 → F8)
 
 | Fase | Tema | Status |
 |------|------|--------|
-| **F0** | Fundamentos, setup e toolchain (Go + Angular + Git + Docker local) | 🔄 em andamento |
-| **F1** | Core Domain Backend: contas, ledger double-entry e saldo | ⏳ |
+| **F0** | Fundamentos, setup e toolchain (Go + Angular + Git + Docker local) | ✅ concluída |
+| **F1** | Core Domain Backend: contas, ledger double-entry e saldo | 🔄 em andamento |
 | **F2** | API REST, autenticação (JWT) e autorização (RBAC + MFA) | ⏳ |
 | **F3** | Frontend Angular: telas, forms, services e estado reativo | ⏳ |
 | **F4** | Integração full-stack: transferência + Pix-like + tempo real | ⏳ |
